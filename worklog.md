@@ -71,3 +71,27 @@ Stage Summary:
 - Slider now uses Senegalese fashion photography with French/Wolof-inspired titles
 - 6 local images in /public/images/ (no external Unsplash dependency)
 - Component fully functional at / (main page) and /demo (standalone)
+---
+Task ID: 1
+Agent: Main Agent
+Task: Rename site from AfriqueLuxe to Keur Gui Luxe, update footer with Keur'Geek Digital credit, regenerate images with Senegalese fashion theme
+
+Work Log:
+- Updated layout.tsx metadata: title, description, keywords to reference Keur Gui Luxe and Sénégal
+- Updated page.tsx: image alt text changed from AfriqueLuxe to Keur Gui Luxe
+- Updated motion-footer.tsx: marquee items (Keur Gui Luxe, Teranga, Luxe Sénégalais), giant title (Keur Gui / Luxe), logo alt text, brand description, copyright line, added Keur'Geek Digital credit
+- Updated cta-section-with-gallery.tsx: "AfriqueLuxe" → "Keur Gui Luxe" in body text, "haute couture africaine" → "haute couture sénégalaise"
+- Regenerated logo.png with Keur Gui Luxe branding
+- Regenerated all 6 slide-senegal images with Senegalese fashion themes (boubou, bazin riche, wax print, Dakar settings)
+- Regenerated all 12 collection images with Senegalese fashion themes
+- Regenerated all 4 gallery-heritage images with Senegalese artisan themes
+- Regenerated featured-dakar-sunset.png with Dakar sunset boubou theme
+- Verified project builds successfully (next build)
+- Verified dev server serves correctly (HTTP 200)
+- Verified all Keur Gui Luxe and Keur'Geek Digital references render correctly in HTML
+
+Stage Summary:
+- Site fully renamed from AfriqueLuxe to Keur Gui Luxe
+- Footer now credits Keur'Geek Digital as the creator
+- All 25 images regenerated with Senegalese fashion mode themes
+- Project compiles and runs successfully

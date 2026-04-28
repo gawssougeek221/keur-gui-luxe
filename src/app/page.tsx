@@ -393,7 +393,7 @@ export default function HomePage() {
           <div className="featured-image-container" style={{ height: "600px" }}>
             <img
               src="/images/featured-dakar-sunset.png"
-              alt="Robe Dakar Sunset - Pièce Vedette AfriqueLuxe"
+              alt="Robe Dakar Sunset - Pièce Vedette Keur Gui Luxe"
               loading="lazy"
             />
             <div

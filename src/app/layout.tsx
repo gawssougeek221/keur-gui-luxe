@@ -6,9 +6,9 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AfriqueLuxe - Haute Couture Africaine",
-  description: "Decouvrez les collections exclusives de haute couture africaine. Luxe, heritage et modernite au coeur de l'Afrique.",
-  keywords: "haute couture, afrique, luxe, mode, fashion, collections, premium",
+  title: "Keur Gui Luxe - Haute Couture Sénégalaise",
+  description: "Decouvrez les collections exclusives de haute couture senegalaise. Luxe, heritage et modernite au coeur du Senegal.",
+  keywords: "haute couture, senegal, luxe, mode, fashion, dakar, collections, premium, keur gui luxe",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -82,7 +82,7 @@ export default function CtaSectionWithGallery() {
               maxWidth: "480px",
             }}
           >
-            Depuis trois décennies, AfriqueLuxe incarne l'excellence de la haute couture africaine.
+            Depuis trois décennies, Keur Gui Luxe incarne l'excellence de la haute couture sénégalaise.
             Chaque création est le fruit d'un savoir-faire ancestral transmis de génération en génération,
             marié à une vision résolument contemporaine. Nos artisans, héritiers de techniques séculaires,
             transforment les plus belles étoffes en oeuvres d'art vestimentaires.

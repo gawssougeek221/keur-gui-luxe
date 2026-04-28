@@ -86,15 +86,15 @@ function MagneticButton({
 /* ========== Marquee ========== */
 function MarqueeTicker() {
   const items = [
-    "AfriqueLuxe",
+    "Keur Gui Luxe",
     "★",
     "Haute Couture",
     "★",
     "Dakar",
     "★",
-    "Héritage",
+    "Teranga",
     "★",
-    "Luxe Africain",
+    "Luxe Sénégalais",
     "★",
     "Élégance",
     "★",
@@ -209,7 +209,7 @@ export default function MotionFooter() {
               backgroundClip: "text",
             }}
           >
-            Afrique
+            Keur Gui
             <br />
             Luxe
           </h2>
@@ -232,7 +232,7 @@ export default function MotionFooter() {
             <div style={{ marginBottom: "1.5rem" }}>
               <img
                 src="/images/logo.png"
-                alt="AfriqueLuxe"
+                alt="Keur Gui Luxe"
                 style={{ height: "40px", width: "auto" }}
               />
             </div>
@@ -245,8 +245,8 @@ export default function MotionFooter() {
                 marginBottom: "2rem",
               }}
             >
-              L'essence du luxe africain. Des créations qui transcendent le temps
-              et célèbrent l'héritage d'un continent.
+              L'essence du luxe sénégalais. Des créations qui transcendent le temps
+              et célèbrent l'héritage du Sénégal, entre Teranga et élégance.
             </p>
             <div style={{ display: "flex", gap: "12px" }}>
               {["Instagram", "Pinterest", "Twitter"].map((social) => (
@@ -367,9 +367,14 @@ export default function MotionFooter() {
             gap: "1rem",
           }}
         >
-          <p style={{ color: "#555", fontSize: "0.8rem" }}>
-            © 2025 AfriqueLuxe. Tous droits réservés.
-          </p>
+          <div>
+            <p style={{ color: "#555", fontSize: "0.8rem", marginBottom: "4px" }}>
+              © 2025 Keur Gui Luxe. Tous droits réservés.
+            </p>
+            <p style={{ color: "#777", fontSize: "0.7rem", letterSpacing: "0.02em" }}>
+              Site créé par <span style={{ color: "#ff007f", fontWeight: 600 }}>Keur'Geek Digital</span> — Startup sénégalaise spécialisée dans l'IA et les solutions digitales pour les PME
+            </p>
+          </div>
           <div style={{ display: "flex", gap: "1.5rem" }}>
             {["Mentions légales", "Confidentialité", "CGV"].map((item) => (
               <a
