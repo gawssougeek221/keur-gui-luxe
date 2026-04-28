@@ -3,7 +3,7 @@
 import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import LuminaInteractiveList from "@/components/ui/lumina-interactive-list";
+import { Component as LuminaInteractiveList } from "@/components/ui/lumina-interactive-list";
 import CtaSectionWithGallery from "@/components/ui/cta-section-with-gallery";
 import MotionFooter from "@/components/ui/motion-footer";
 
