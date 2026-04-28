@@ -102,12 +102,12 @@ export function Component() {
     const TRANSITION_DURATION = () => SLIDER_CONFIG.settings.transitionDuration;
 
     const slides = [
-      { title: "Ethereal Glow", description: "A soft, radiant light that illuminates the soul.", media: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&h=1100&fit=crop&q=80" },
-      { title: "Rose Mirage", description: "Lost in a desert of blooming dreams and endless horizons.", media: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=800&h=1100&fit=crop&q=80" },
-      { title: "Velvet Mystique", description: "Wrapped in the deep, luxurious embrace of the night.", media: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=800&h=1100&fit=crop&q=80" },
-      { title: "Golden Hour", description: "That fleeting moment when the world is dipped in gold.", media: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&h=1100&fit=crop&q=80" },
-      { title: "Midnight Dreams", description: "Where reality fades and imagination takes flight.", media: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&h=1100&fit=crop&q=80" },
-      { title: "Silver Light", description: "A cool, metallic shimmer reflecting the urban pulse.", media: "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=800&h=1100&fit=crop&q=80" },
+      { title: "Lumière Wolof", description: "Un éclat radieux qui illumine l'âme du Sénégal, entre tradition et modernité.", media: "/images/slide-senegal-1.png" },
+      { title: "Teranga Rose", description: "Perdue dans un désert de rêves éclos et d'horizons sans fin, l'esprit de la Teranga.", media: "/images/slide-senegal-2.png" },
+      { title: "Velours Mystique", description: "Enlacé dans l'étreinte profonde et luxueuse de la nuit dakaroise.", media: "/images/slide-senegal-3.png" },
+      { title: "Heure Dorée", description: "Ce moment fugace où le monde est trempé d'or, du coucher de soleil sur l'île de Gorée.", media: "/images/slide-senegal-4.png" },
+      { title: "Rêves Minuit", description: "La où la réalité s'efface et l'imagination prend son envol sous les étoiles du Sahel.", media: "/images/slide-senegal-5.png" },
+      { title: "Lumière d'Argent", description: "Un éclat métallique et frais qui reflête le pouls urbain de Dakar.", media: "/images/slide-senegal-6.png" },
     ];
 
     // --- SHADERS ---
