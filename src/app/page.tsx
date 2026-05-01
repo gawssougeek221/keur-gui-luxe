@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Component as LuminaInteractiveList } from "@/components/ui/lumina-interactive-list";
 import CtaSectionWithGallery from "@/components/ui/cta-section-with-gallery";
 import MotionFooter from "@/components/ui/motion-footer";
+import MorphingPreloader from "@/components/ui/morphing-preloader";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -231,9 +232,12 @@ export default function HomePage() {
   const collectionsRef = useRef<HTMLElement>(null);
   const tendancesRef = useRef<HTMLElement>(null);
   const featuredRef = useRef<HTMLElement>(null);
+  const [preloaderDone, setPreloaderDone] = useState(false);
 
   /* Section title animations */
   useEffect(() => {
+    if (!preloaderDone) return;
+
     const sections = [
       { ref: collectionsRef, id: "collections-title" },
       { ref: tendancesRef, id: "tendances-title" },
@@ -281,10 +285,14 @@ export default function HomePage() {
     return () => {
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
-  }, []);
+  }, [preloaderDone]);
 
   return (
-    <main>
+    <>
+      {/* Morphing Preloader */}
+      <MorphingPreloader onComplete={() => setPreloaderDone(true)} />
+
+      <main style={{ visibility: preloaderDone ? "visible" : "hidden" }}>
       {/* ========== HERO SLIDER ========== */}
       <LuminaInteractiveList />
 
@@ -548,5 +556,6 @@ export default function HomePage() {
       {/* ========== FOOTER CINEMATIQUE ========== */}
       <MotionFooter />
     </main>
+    </>
   );
 }

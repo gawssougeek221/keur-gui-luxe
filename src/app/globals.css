@@ -459,6 +459,37 @@ body {
   transform: scale(1.15);
 }
 
+/* ========== MORPHING PRELOADER ========== */
+@keyframes morphParticle {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5);
+  }
+  25% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.4;
+    transform: translateY(-30px) scale(1);
+  }
+  75% {
+    opacity: 0.6;
+  }
+}
+
+.morph-preloader .morph-letter {
+  will-change: transform, opacity;
+}
+
+.morph-preloader svg path {
+  will-change: transform, opacity, d;
+  transition: none;
+}
+
+.morph-particle {
+  will-change: transform, opacity;
+}
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .slider-wrapper .slide-content {

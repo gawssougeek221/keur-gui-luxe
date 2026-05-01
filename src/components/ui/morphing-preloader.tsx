@@ -1,0 +1,347 @@
+"use client";
+
+import React, { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+
+/* 
+  Morphing Preloader — All SVG paths use exactly 12 cubic bezier segments
+  with matching command structure so GSAP can interpolate smoothly.
+  Shapes: Circle → Diamond → Star-flower → Hexagon → Cross → Flower → Circle
+*/
+
+const MORPH_PATHS = [
+  // Circle (12 cubic segments)
+  "M50,5 C57,5 64,7 70,11 C76,15 82,21 86,28 C90,35 93,42 94,50 C95,58 94,65 91,72 C88,79 83,85 77,89 C71,93 64,95 57,95 C50,95 43,95 36,93 C29,91 23,87 18,81 C13,75 9,68 7,61 C5,54 5,47 6,40 C7,33 10,27 14,21 C18,15 24,10 31,7 C38,4 44,5 50,5 Z",
+  // Diamond (12 cubic segments — elongated points)
+  "M50,2 C52,12 54,20 58,28 C62,36 68,42 76,46 C84,50 92,50 98,50 C92,50 84,50 76,54 C68,58 62,64 58,72 C54,80 52,88 50,98 C48,88 46,80 42,72 C38,64 32,58 24,54 C16,50 8,50 2,50 C8,50 16,50 24,46 C32,42 38,36 42,28 C46,20 48,12 50,2 Z",
+  // Star-flower (12 cubic segments with scalloped edges)
+  "M50,5 C54,15 62,18 70,11 C72,21 68,28 76,28 C80,36 74,42 77,50 C82,54 90,52 91,58 C88,66 80,64 76,72 C78,80 72,85 68,89 C62,86 58,78 50,78 C42,78 38,86 32,89 C28,85 22,80 24,72 C20,64 12,66 9,58 C10,52 18,54 23,50 C26,42 20,36 24,28 C32,28 28,21 30,11 C38,18 46,15 50,5 Z",
+  // Hexagon (12 cubic segments — slightly curved edges)
+  "M50,3 C56,3 64,8 70,15 C76,22 84,24 90,27 C90,33 88,42 90,50 C90,58 88,67 90,73 C84,76 76,78 70,85 C64,92 56,97 50,97 C44,97 36,92 30,85 C24,78 16,76 10,73 C10,67 12,58 10,50 C10,42 12,33 10,27 C16,24 24,22 30,15 C36,8 44,3 50,3 Z",
+  // Cross / Plus (12 cubic segments forming a cross)
+  "M40,5 C42,5 44,5 46,5 C48,5 50,5 50,8 C50,15 50,22 50,28 C56,28 64,28 72,28 C76,28 80,28 82,32 C84,36 84,40 84,44 C84,48 84,50 80,50 C72,50 64,50 56,50 C56,58 56,66 56,72 C56,76 56,80 52,82 C48,84 46,85 44,85 C42,85 40,84 38,82 C36,80 36,76 36,72 C36,66 36,58 36,50 C28,50 20,50 12,50 C8,50 6,50 5,46 C5,42 5,38 7,34 C9,30 12,28 16,28 C24,28 32,28 36,28 C36,22 36,15 36,8 C36,5 38,5 40,5 Z",
+  // African Shield / Mask (12 cubic segments)
+  "M50,5 C58,5 66,10 72,18 C78,26 82,36 85,46 C88,56 88,66 84,74 C80,82 74,88 66,92 C60,95 55,97 50,97 C45,97 40,95 34,92 C26,88 20,82 16,74 C12,66 12,56 15,46 C18,36 22,26 28,18 C34,10 42,5 50,5 Z",
+  // Circle again (same as first for smooth loop)
+  "M50,5 C57,5 64,7 70,11 C76,15 82,21 86,28 C90,35 93,42 94,50 C95,58 94,65 91,72 C88,79 83,85 77,89 C71,93 64,95 57,95 C50,95 43,95 36,93 C29,91 23,87 18,81 C13,75 9,68 7,61 C5,54 5,47 6,40 C7,33 10,27 14,21 C18,15 24,10 31,7 C38,4 44,5 50,5 Z",
+];
+
+export default function MorphingPreloader({ onComplete }: { onComplete: () => void }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const svgPathRef = useRef<SVGPathElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
+  const taglineRef = useRef<HTMLParagraphElement>(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const onCompleteRef = useRef(onComplete);
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
+  useEffect(() => {
+    const path = svgPathRef.current;
+    const progress = progressRef.current;
+    const text = textRef.current;
+    const line = lineRef.current;
+    const tagline = taglineRef.current;
+    const container = containerRef.current;
+    if (!path || !progress || !text || !line || !tagline || !container) return;
+
+    const totalMorphTime = (MORPH_PATHS.length - 1) * 0.8;
+
+    // Build the timeline
+    const tl = gsap.timeline({
+      onComplete: () => {
+        // Exit animation — curtain wipe up
+        const exitTl = gsap.timeline({
+          onComplete: () => {
+            setIsVisible(false);
+            onCompleteRef.current();
+          },
+        });
+
+        exitTl
+          .to(text.querySelectorAll(".morph-letter"), {
+            y: -80,
+            opacity: 0,
+            rotateX: 90,
+            duration: 0.5,
+            stagger: 0.02,
+            ease: "power3.in",
+          }, 0)
+          .to(tagline, {
+            y: -30,
+            opacity: 0,
+            duration: 0.4,
+            ease: "power3.in",
+          }, 0.1)
+          .to(line, {
+            scaleX: 0,
+            duration: 0.5,
+            ease: "power3.inOut",
+          }, 0.15)
+          .to(path, {
+            scale: 0,
+            opacity: 0,
+            duration: 0.6,
+            ease: "power3.in",
+          }, 0.2)
+          .to(progress, {
+            scaleX: 0,
+            duration: 0.4,
+            ease: "power2.in",
+          }, 0.2)
+          .to(container, {
+            yPercent: -100,
+            duration: 1.2,
+            ease: "power4.inOut",
+          }, 0.6);
+      },
+    });
+
+    // Phase 1: Shape morphs (cycle through all shapes)
+    MORPH_PATHS.forEach((targetPath, i) => {
+      if (i === 0) return;
+      tl.to(path, {
+        attr: { d: targetPath },
+        duration: 0.8,
+        ease: "power2.inOut",
+      }, i * 0.8);
+    });
+
+    // Phase 2: Progress bar fills (synced with morphs)
+    tl.fromTo(progress, 
+      { scaleX: 0 },
+      { scaleX: 1, duration: totalMorphTime, ease: "none" },
+      0
+    );
+
+    // Phase 3: Shape scales in
+    tl.fromTo(path,
+      { scale: 0.3, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 1, ease: "elastic.out(1, 0.6)" },
+      0
+    );
+
+    // Phase 4: Gold glow intensifies
+    tl.to(path, {
+      stroke: "#d4af37",
+      fill: "rgba(212,175,55,0.08)",
+      strokeWidth: 2,
+      duration: totalMorphTime * 0.6,
+      ease: "power1.inOut",
+    }, totalMorphTime * 0.3);
+
+    // Phase 5: Shape rotates
+    tl.to(path, {
+      rotation: 360,
+      transformOrigin: "50% 50%",
+      duration: totalMorphTime,
+      ease: "none",
+    }, 0);
+
+    // Phase 6: Pulse scale on each morph
+    MORPH_PATHS.forEach((_, i) => {
+      if (i === 0) return;
+      tl.to(path, {
+        scale: 1.08,
+        duration: 0.15,
+        ease: "power2.out",
+      }, i * 0.8 + 0.3);
+      tl.to(path, {
+        scale: 1,
+        duration: 0.25,
+        ease: "power2.inOut",
+      }, i * 0.8 + 0.45);
+    });
+
+    // Phase 7: Text letters cascade in
+    const letters = text.querySelectorAll(".morph-letter");
+    tl.fromTo(letters,
+      { y: 60, opacity: 0, rotateX: -90 },
+      {
+        y: 0,
+        opacity: 1,
+        rotateX: 0,
+        duration: 0.8,
+        stagger: 0.04,
+        ease: "power4.out",
+      },
+      totalMorphTime - 1
+    );
+
+    // Phase 8: Golden line draws
+    tl.fromTo(line,
+      { scaleX: 0 },
+      { scaleX: 1, duration: 1.2, ease: "power2.inOut" },
+      totalMorphTime - 0.8
+    );
+
+    // Phase 9: Tagline fades in
+    tl.fromTo(tagline,
+      { y: 20, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" },
+      totalMorphTime - 0.3
+    );
+
+    // Phase 10: Hold for impact
+    tl.to({}, { duration: 1 });
+
+    return () => {
+      tl.kill();
+    };
+  }, []);
+
+  if (!isVisible) return null;
+
+  const brandName = "KEUR GUI LUXE";
+
+  return (
+    <div
+      ref={containerRef}
+      className="morph-preloader"
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        background: "#000",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        perspective: "800px",
+      }}
+    >
+      {/* Morphing SVG Shape */}
+      <svg
+        viewBox="0 0 100 100"
+        style={{
+          width: "clamp(80px, 12vw, 140px)",
+          height: "clamp(80px, 12vw, 140px)",
+          marginBottom: "2.5rem",
+          filter: "drop-shadow(0 0 30px rgba(212,175,55,0.3))",
+        }}
+      >
+        <path
+          ref={svgPathRef}
+          d={MORPH_PATHS[0]}
+          fill="rgba(212,175,55,0.02)"
+          stroke="rgba(212,175,55,0.6)"
+          strokeWidth="1.5"
+          style={{
+            transformOrigin: "50% 50%",
+          }}
+        />
+      </svg>
+
+      {/* Brand name letters */}
+      <div
+        ref={textRef}
+        style={{
+          display: "flex",
+          gap: "5px",
+          marginBottom: "1.5rem",
+          overflow: "hidden",
+        }}
+      >
+        {brandName.split("").map((char, i) => (
+          <span
+            key={i}
+            className="morph-letter"
+            style={{
+              display: "inline-block",
+              fontSize: "clamp(1.2rem, 3.5vw, 2.8rem)",
+              fontWeight: 300,
+              letterSpacing: "0.22em",
+              color: char === " " ? "transparent" : "#fff",
+              transformOrigin: "center bottom",
+              willChange: "transform",
+              opacity: 0,
+            }}
+          >
+            {char === " " ? "\u00A0" : char}
+          </span>
+        ))}
+      </div>
+
+      {/* Golden line */}
+      <div
+        ref={lineRef}
+        style={{
+          width: "180px",
+          height: "1px",
+          background: "linear-gradient(90deg, transparent, #d4af37, transparent)",
+          transformOrigin: "center",
+          transform: "scaleX(0)",
+          marginBottom: "1.5rem",
+        }}
+      />
+
+      {/* Tagline */}
+      <p
+        ref={taglineRef}
+        style={{
+          fontSize: "0.65rem",
+          letterSpacing: "0.5em",
+          textTransform: "uppercase",
+          color: "#555",
+          opacity: 0,
+        }}
+      >
+        Haute Couture Sénégalaise
+      </p>
+
+      {/* Progress bar */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: "2px",
+          background: "rgba(255,255,255,0.03)",
+        }}
+      >
+        <div
+          ref={progressRef}
+          style={{
+            height: "100%",
+            background: "linear-gradient(90deg, #d4af37, #ff007f, #d4af37)",
+            transformOrigin: "left",
+            transform: "scaleX(0)",
+          }}
+        />
+      </div>
+
+      {/* Ambient particles */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          overflow: "hidden",
+          pointerEvents: "none",
+        }}
+      >
+        {Array.from({ length: 24 }).map((_, i) => (
+          <div
+            key={i}
+            className="morph-particle"
+            style={{
+              position: "absolute",
+              width: Math.random() * 3 + 1 + "px",
+              height: Math.random() * 3 + 1 + "px",
+              borderRadius: "50%",
+              background: i % 3 === 0 ? "rgba(212,175,55,0.7)" : "rgba(255,255,255,0.2)",
+              left: Math.random() * 100 + "%",
+              top: Math.random() * 100 + "%",
+              opacity: 0,
+              animation: `morphParticle ${2 + Math.random() * 4}s ease-in-out ${Math.random() * 2}s infinite`,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
