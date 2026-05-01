@@ -7,6 +7,15 @@ import { Component as LuminaInteractiveList } from "@/components/ui/lumina-inter
 import CtaSectionWithGallery from "@/components/ui/cta-section-with-gallery";
 import MotionFooter from "@/components/ui/motion-footer";
 import MorphingPreloader from "@/components/ui/morphing-preloader";
+import BrandStoryScroll from "@/components/ui/brand-story-scroll";
+import CountdownCollection from "@/components/ui/countdown-collection";
+import NewsletterCinematic from "@/components/ui/newsletter-cinematic";
+import InstagramFeed from "@/components/ui/instagram-feed";
+import AmbientSound from "@/components/ui/ambient-sound";
+import AiStyliste from "@/components/ui/ai-styliste";
+import ProductViewer3D from "@/components/ui/product-viewer-3d";
+import GoldParticles from "@/components/ui/gold-particles";
+import ThemeToggle from "@/components/ui/theme-toggle";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -337,6 +346,7 @@ export default function HomePage() {
       {/* ========== TENDANCES 2025 ========== */}
       <section
         ref={tendancesRef}
+        data-section-id="tendances"
         style={{
           padding: "6rem 8vw",
           background: "linear-gradient(180deg, #0a0a0a 0%, #0d000d 50%, #0a0a0a 100%)",
@@ -368,6 +378,7 @@ export default function HomePage() {
       {/* ========== PRODUIT EN VEDETTE ========== */}
       <section
         ref={featuredRef}
+        data-section-id="featured"
         style={{
           padding: "8rem 8vw",
           position: "relative",
@@ -553,8 +564,48 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ========== 3D PRODUCT VIEWER ========== */}
+      <section
+        data-section-id="3d-viewer"
+        style={{
+          padding: "6rem 8vw",
+          position: "relative",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          background: "linear-gradient(180deg, #0a0a0a 0%, #0d0011 50%, #0a0a0a 100%)",
+        }}
+      >
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 50%, rgba(212,175,55,0.04) 0%, transparent 60%)", pointerEvents: "none" }} />
+        <div style={{ maxWidth: "600px", width: "100%", position: "relative", zIndex: 1 }}>
+          <div className="section-label" style={{ textAlign: "center" }}>Visualisation 3D</div>
+          <h2 className="section-title" style={{ marginBottom: "2rem", textAlign: "center" }}>
+            Explorez en <span style={{ color: "#d4af37" }}>3 Dimensions</span>
+          </h2>
+          <ProductViewer3D />
+        </div>
+      </section>
+
+      {/* ========== BRAND STORY SCROLL ========== */}
+      <BrandStoryScroll />
+
+      {/* ========== COUNTDOWN COLLECTION ========== */}
+      <CountdownCollection />
+
+      {/* ========== INSTAGRAM FEED ========== */}
+      <InstagramFeed />
+
+      {/* ========== NEWSLETTER CINEMATIQUE ========== */}
+      <NewsletterCinematic />
+
       {/* ========== FOOTER CINEMATIQUE ========== */}
       <MotionFooter />
+
+      {/* ========== FLOATING UI — Ambient Sound + AI Styliste + Theme Toggle ========== */}
+      <GoldParticles />
+      <AmbientSound />
+      <AiStyliste />
+      <ThemeToggle />
     </main>
     </>
   );

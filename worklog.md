@@ -95,3 +95,51 @@ Stage Summary:
 - Footer now credits Keur'Geek Digital as the creator
 - All 25 images regenerated with Senegalese fashion mode themes
 - Project compiles and runs successfully
+---
+Task ID: 3
+Agent: Main Agent (Group C)
+Task: Create Interactive Features — Ambient Sound, AI Styliste, 3D Product Viewer
+
+Work Log:
+- Created ambient-sound.tsx: Web Audio API ambient African sound system
+  - Floating button at bottom-left with gold/gray state-dependent styling
+  - 3 layered sine oscillators (110Hz + 165Hz + 220Hz) with detuning
+  - Delay-based reverb effect (0.4s delay, 0.25 feedback, lowpass 1200Hz)
+  - Rhythm pattern: soft thump every 2 seconds (80→40Hz burst + 1200Hz click)
+  - Scroll-triggered chime (880→660Hz) with IntersectionObserver and 3s cooldown
+  - prefers-reduced-motion respected (button disabled/dimmed)
+  - "Activer l'ambiance" tooltip, smooth fade-in/out, proper cleanup
+- Created ai-styliste.tsx: AI fashion stylist chatbot
+  - Floating button at bottom-right (right: 84px, above theme toggle)
+  - Glassmorphism chat panel (380px wide, blur 24px)
+  - 4 quick reply buttons for preset fashion queries
+  - GSAP animations for panel open/close and message appearance
+  - Typing indicator with 3 bouncing dots
+  - User messages: pink bg right-aligned; Bot messages: dark bg with gold border
+  - Error handling with fallback French responses
+- Created /api/styliste/route.ts: AI stylist API endpoint
+  - POST endpoint using z-ai-web-dev-sdk chat completions
+  - System prompt: Keur Gui Luxe expert stylist with 12 collections knowledge
+  - French responses with collection recommendations and price ranges
+  - Graceful error handling returning status 200 with fallback message
+- Created product-viewer-3d.tsx: Three.js 3D dress viewer
+  - LatheGeometry dress silhouette (neckline→bust→waist→skirt profile, 64 segments)
+  - Vertex color gradient: gold (#d4af37) top → magenta (#ff007f) bottom
+  - MeshPhysicalMaterial: metalness 0.6, clearcoat 0.4, transparency 0.92
+  - 200 sparkle particles with additive blending and floating animation
+  - 3-point lighting: gold key, white fill, pink accent rim
+  - Auto-rotation, mouse drag, scroll zoom, touch support
+  - Proper Three.js cleanup on unmount
+- Integrated all 3 components into page.tsx
+  - 3D Viewer section between Featured Product and Brand Story Scroll
+  - AmbientSound and AiStyliste as floating UI elements
+  - Added data-section-id attributes to sections for ambient sound chimes
+- Fixed ESLint error: reducedMotion useState initializer moved from effect to lazy init
+- All lint checks pass clean, page compiles and serves with 200 status
+
+Stage Summary:
+- 3 interactive components + 1 API route created
+- Ambient sound with Web Audio API, scroll-triggered chimes, accessibility
+- AI chatbot with glassmorphism UI, quick replies, GSAP animations
+- 3D dress viewer with LatheGeometry, vertex colors, sparkle particles
+- All integrated into main page, lint passes clean
