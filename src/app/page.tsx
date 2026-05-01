@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Component as LuminaInteractiveList } from "@/components/ui/lumina-interactive-list";
@@ -138,10 +138,12 @@ function CollectionCard({ collection, index }: { collection: typeof collections[
   );
 }
 
-/* ========== TENDANCE CARD ========== */
+/* ========== TENDANCE CARD (3D tilt + glow + border anim) ========== */
 function TendanceCard({ tendance, index }: { tendance: typeof tendances[0]; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
 
+  /* Scroll-triggered entrance */
   useEffect(() => {
     const card = cardRef.current;
     if (!card) return;
@@ -173,37 +175,134 @@ function TendanceCard({ tendance, index }: { tendance: typeof tendances[0]; inde
     };
   }, [index]);
 
+  /* 3D tilt + glow follow on mouse move */
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    const glow = glowRef.current;
+    if (!card) return;
+
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    /* Tilt angles — max ±8° */
+    const rotateX = ((y - centerY) / centerY) * -8;
+    const rotateY = ((x - centerX) / centerX) * 8;
+
+    gsap.to(card, {
+      rotateX,
+      rotateY,
+      duration: 0.4,
+      ease: "power2.out",
+      transformPerspective: 800,
+    });
+
+    /* Glow follows cursor */
+    if (glow) {
+      gsap.to(glow, {
+        x: x - rect.width * 0.4,
+        y: y - rect.height * 0.4,
+        opacity: 1,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    }
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    const card = cardRef.current;
+    const glow = glowRef.current;
+    if (card) {
+      gsap.to(card, {
+        rotateX: 0,
+        rotateY: 0,
+        duration: 0.6,
+        ease: "elastic.out(1, 0.5)",
+        transformPerspective: 800,
+      });
+    }
+    if (glow) {
+      gsap.to(glow, {
+        opacity: 0,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    }
+  }, []);
+
   return (
-    <div ref={cardRef} className="tendance-card" style={{ opacity: 0 }}>
+    <div
+      ref={cardRef}
+      className="tendance-card"
+      style={{ opacity: 0, transformStyle: "preserve-3d", willChange: "transform" }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Glow follower */}
       <div
+        ref={glowRef}
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          marginBottom: "1.5rem",
+          position: "absolute",
+          width: "80%",
+          height: "80%",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(255,0,127,0.12) 0%, rgba(212,175,55,0.06) 40%, transparent 70%)",
+          pointerEvents: "none",
+          opacity: 0,
+          filter: "blur(30px)",
+          zIndex: 0,
+          transition: "none",
         }}
-      >
-        <span className="tendance-counter">0{index + 1}</span>
-        <span
+      />
+
+      {/* Animated border glow */}
+      <div
+        className="tendance-card-border-glow"
+        style={{
+          position: "absolute",
+          inset: -1,
+          borderRadius: "1rem",
+          background: "conic-gradient(from var(--border-angle, 0deg), transparent 60%, rgba(255,0,127,0.3) 75%, rgba(212,175,55,0.3) 85%, transparent 100%)",
+          zIndex: -1,
+          opacity: 0,
+          transition: "opacity 0.5s ease",
+        }}
+      />
+
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <div
           style={{
-            background: "rgba(255,0,127,0.15)",
-            color: "#ff007f",
-            padding: "6px 14px",
-            borderRadius: "999px",
-            fontSize: "0.85rem",
-            fontWeight: 700,
-            fontFamily: "var(--font-geist-mono)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            marginBottom: "1.5rem",
           }}
         >
-          {tendance.trend}
-        </span>
+          <span className="tendance-counter">0{index + 1}</span>
+          <span
+            style={{
+              background: "rgba(255,0,127,0.15)",
+              color: "#ff007f",
+              padding: "6px 14px",
+              borderRadius: "999px",
+              fontSize: "0.85rem",
+              fontWeight: 700,
+              fontFamily: "var(--font-geist-mono)",
+              transition: "all 0.3s ease",
+            }}
+          >
+            {tendance.trend}
+          </span>
+        </div>
+        <h3 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "0.75rem", transform: "translateZ(20px)" }}>
+          {tendance.title}
+        </h3>
+        <p style={{ color: "#a0a0b0", fontSize: "0.9rem", lineHeight: 1.7, transform: "translateZ(10px)" }}>
+          {tendance.description}
+        </p>
       </div>
-      <h3 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "0.75rem" }}>
-        {tendance.title}
-      </h3>
-      <p style={{ color: "#a0a0b0", fontSize: "0.9rem", lineHeight: 1.7 }}>
-        {tendance.description}
-      </p>
     </div>
   );
 }

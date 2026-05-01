@@ -300,12 +300,38 @@ body {
   background: linear-gradient(135deg, #111118, #1a0033);
   border: 1px solid rgba(255, 0, 127, 0.1);
   padding: 2rem;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: border-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              scale 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: default;
 }
 
 .tendance-card:hover {
-  border-color: rgba(255, 0, 127, 0.4);
-  box-shadow: 0 8px 40px rgba(255, 0, 127, 0.1);
+  border-color: rgba(255, 0, 127, 0.5);
+  box-shadow: 0 8px 40px rgba(255, 0, 127, 0.12), 0 0 60px rgba(212, 175, 55, 0.05);
+  scale: 1.02;
+}
+
+.tendance-card:hover .tendance-card-border-glow {
+  opacity: 1 !important;
+}
+
+.tendance-card:hover .tendance-counter {
+  text-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes borderRotate {
+  to { --border-angle: 360deg; }
+}
+
+.tendance-card-border-glow {
+  animation: borderRotate 4s linear infinite;
 }
 
 .tendance-counter {
@@ -314,6 +340,7 @@ body {
   color: #ff007f;
   line-height: 1;
   font-family: var(--font-geist-mono);
+  transition: text-shadow 0.4s ease;
 }
 
 /* ========== FEATURED SECTION ========== */
@@ -515,12 +542,17 @@ body.light-theme .tendance-card {
 }
 
 body.light-theme .tendance-card:hover {
-  border-color: rgba(212, 175, 55, 0.4);
-  box-shadow: 0 8px 40px rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 8px 40px rgba(212, 175, 55, 0.12), 0 0 60px rgba(212, 175, 55, 0.05);
 }
 
 body.light-theme .tendance-counter {
   color: #d4af37;
+}
+
+body.light-theme .tendance-counter:hover,
+body.light-theme .tendance-card:hover .tendance-counter {
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
 }
 
 body.light-theme .featured-spec {
