@@ -4,10 +4,10 @@ import React, { useState, useEffect } from "react";
 
 /* ================================================================
    Countdown Collection — Flip-clock countdown to Dakar Fashion Week
-   Target: July 15, 2025 19:00:00 GMT
+   Target: December 15, 2026 19:00:00 GMT
    ================================================================ */
 
-const TARGET_DATE = new Date("2025-07-15T19:00:00Z").getTime();
+const TARGET_DATE = new Date("2026-12-15T19:00:00Z").getTime();
 
 interface TimeLeft {
   days: number;
@@ -342,7 +342,7 @@ export default function CountdownCollection() {
             marginBottom: "0.5rem",
           }}
         >
-          Collection Été 2025
+          Collection Hiver 2026
         </h2>
 
         {/* Subtitle */}
@@ -356,7 +356,7 @@ export default function CountdownCollection() {
             marginBottom: "3rem",
           }}
         >
-          Dakar Fashion Week
+          Dakar Fashion Week — Hiver 2026
         </p>
 
         {/* Countdown */}

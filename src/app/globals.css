@@ -543,6 +543,35 @@ body.light-theme ::-webkit-scrollbar-thumb {
   background: #d4af37;
 }
 
+body.light-theme .section-title {
+  color: #1a1a2e;
+}
+
+body.light-theme .instagram-card {
+  background: #ffffff;
+  border-color: rgba(26, 26, 46, 0.08);
+}
+
+body.light-theme .brand-story-chapter {
+  background: linear-gradient(135deg, #faf5eb, #ffffff, #faf5eb) !important;
+}
+
+body.light-theme .brand-story-number {
+  color: #1a1a2e !important;
+}
+
+body.light-theme .brand-story-text h3 {
+  color: #1a1a2e !important;
+}
+
+body.light-theme .brand-story-text p {
+  color: rgba(26, 26, 46, 0.6) !important;
+}
+
+body.light-theme .featured-image-container {
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(212, 175, 55, 0.15);
+}
+
 /* ========== COUNTDOWN FLIP ========== */
 @keyframes countdownFlip {
   0% { transform: rotateX(0); }

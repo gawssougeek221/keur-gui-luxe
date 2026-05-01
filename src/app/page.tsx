@@ -16,6 +16,7 @@ import AiStyliste from "@/components/ui/ai-styliste";
 import ProductViewer3D from "@/components/ui/product-viewer-3d";
 import GoldParticles from "@/components/ui/gold-particles";
 import ThemeToggle from "@/components/ui/theme-toggle";
+import MagneticButton from "@/components/ui/magnetic-buttons";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -501,64 +502,13 @@ export default function HomePage() {
               </span>
             </div>
 
-            <div style={{ display: "flex", gap: "1rem" }}>
-              <a
-                href="#"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "14px 36px",
-                  background: "#ff007f",
-                  color: "#fff",
-                  borderRadius: "999px",
-                  fontWeight: 600,
-                  fontSize: "0.85rem",
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  textDecoration: "none",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseEnter={(e) => {
-                  (e.target as HTMLElement).style.background = "#ff00ff";
-                  (e.target as HTMLElement).style.boxShadow = "0 0 30px rgba(255,0,127,0.5)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.target as HTMLElement).style.background = "#ff007f";
-                  (e.target as HTMLElement).style.boxShadow = "none";
-                }}
-              >
+            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+              <MagneticButton variant="primary" href="#">
                 Commander
-              </a>
-              <a
-                href="#"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "14px 36px",
-                  background: "transparent",
-                  color: "#fff",
-                  border: "1px solid rgba(255,255,255,0.15)",
-                  borderRadius: "999px",
-                  fontWeight: 600,
-                  fontSize: "0.85rem",
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  textDecoration: "none",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseEnter={(e) => {
-                  (e.target as HTMLElement).style.borderColor = "#ff007f";
-                  (e.target as HTMLElement).style.color = "#ff007f";
-                }}
-                onMouseLeave={(e) => {
-                  (e.target as HTMLElement).style.borderColor = "rgba(255,255,255,0.15)";
-                  (e.target as HTMLElement).style.color = "#fff";
-                }}
-              >
+              </MagneticButton>
+              <MagneticButton variant="secondary" href="#">
                 Détails
-              </a>
+              </MagneticButton>
             </div>
           </div>
         </div>
