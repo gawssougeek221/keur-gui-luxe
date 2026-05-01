@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
+  },
   allowedDevOrigins: [
     'preview-chat-6d3e1a24-0d83-4e2c-b2e8-7e18bc0074f0.space-z.ai',
     '.space.chatglm.site',

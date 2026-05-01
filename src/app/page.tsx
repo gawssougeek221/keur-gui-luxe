@@ -16,6 +16,7 @@ import AiStyliste from "@/components/ui/ai-styliste";
 import ProductViewer3D from "@/components/ui/product-viewer-3d";
 import ThemeToggle from "@/components/ui/theme-toggle";
 import MagneticButton from "@/components/ui/magnetic-buttons";
+import ExpandableGallery from "@/components/ui/expandable-gallery";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -312,7 +313,7 @@ export default function HomePage() {
       <section
         id="collections"
         ref={collectionsRef}
-        style={{ padding: "6rem 8vw", position: "relative" }}
+        style={{ padding: "6rem 0", position: "relative" }}
       >
         <div
           style={{
@@ -328,18 +329,14 @@ export default function HomePage() {
         />
 
         <div style={{ maxWidth: "1400px", margin: "0 auto", position: "relative" }}>
-          <div className="section-label">Nos Collections</div>
-          <h2 className="section-title" style={{ marginBottom: "3rem" }}>
+          <div className="section-label" style={{ paddingLeft: "8vw" }}>Nos Collections</div>
+          <h2 className="section-title" style={{ marginBottom: "3rem", paddingLeft: "8vw" }}>
             L'Art de la{" "}
             <span style={{ color: "#ff007f" }}>Couture</span>{" "}
             Africaine
           </h2>
 
-          <div className="collection-grid">
-            {collections.map((collection, i) => (
-              <CollectionCard key={collection.name} collection={collection} index={i} />
-            ))}
-          </div>
+          <ExpandableGallery />
         </div>
       </section>
 
