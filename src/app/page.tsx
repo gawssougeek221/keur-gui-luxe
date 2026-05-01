@@ -211,6 +211,40 @@ function TendanceCard({ tendance, index }: { tendance: typeof tendances[0]; inde
     }
   }, []);
 
+  /* Touch fallback — gentle tilt based on touch position */
+  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    const glow = glowRef.current;
+    if (!card || !e.touches[0]) return;
+
+    const rect = card.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left;
+    const y = e.touches[0].clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((y - centerY) / centerY) * -4;
+    const rotateY = ((x - centerX) / centerX) * 4;
+
+    gsap.to(card, {
+      rotateX,
+      rotateY,
+      duration: 0.3,
+      ease: "power2.out",
+      transformPerspective: 800,
+    });
+
+    if (glow) {
+      gsap.to(glow, {
+        x: x - rect.width * 0.4,
+        y: y - rect.height * 0.4,
+        opacity: 0.7,
+        duration: 0.2,
+        ease: "power2.out",
+      });
+    }
+  }, []);
+
   const handleMouseLeave = useCallback(() => {
     const card = cardRef.current;
     const glow = glowRef.current;
@@ -239,6 +273,8 @@ function TendanceCard({ tendance, index }: { tendance: typeof tendances[0]; inde
       style={{ opacity: 0, transformStyle: "preserve-3d", willChange: "transform" }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleMouseLeave}
     >
       {/* Glow follower */}
       <div
@@ -416,6 +452,7 @@ export default function HomePage() {
         style={{ padding: "6rem 0", position: "relative" }}
       >
         <div
+          className="collection-glow"
           style={{
             position: "absolute",
             top: "50%",
@@ -472,7 +509,7 @@ export default function HomePage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
               gap: "1.5rem",
             }}
           >
@@ -494,6 +531,7 @@ export default function HomePage() {
         }}
       >
         <div
+          className="featured-glow"
           style={{
             position: "absolute",
             bottom: "-20%",
@@ -501,12 +539,12 @@ export default function HomePage() {
             width: "700px",
             height: "700px",
             background: "radial-gradient(circle, rgba(255,0,127,0.06) 0%, transparent 60%)",
-            filter: "blur(80px)",
             pointerEvents: "none",
           }}
         />
 
         <div
+          className="featured-grid"
           style={{
             maxWidth: "1400px",
             margin: "0 auto",
@@ -517,7 +555,7 @@ export default function HomePage() {
           }}
         >
           {/* Image */}
-          <div className="featured-image-container" style={{ height: "600px" }}>
+          <div className="featured-image-container" style={{ height: "clamp(300px, 50vw, 600px)" }}>
             <img
               src="/images/featured-dakar-sunset.png"
               alt="Robe Dakar Sunset - Pièce Vedette Keur Gui Luxe"
@@ -669,6 +707,55 @@ export default function HomePage() {
       <AmbientSound />
       <AiStyliste />
       <ThemeToggle />
+
+      {/* ========== MOBILE RESPONSIVE OVERRIDES ========== */}
+      <style>{`
+        @media (max-width: 768px) {
+          .featured-grid {
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
+          }
+          .featured-image-container {
+            height: clamp(250px, 60vw, 400px) !important;
+          }
+          .tendance-card {
+            padding: 1.25rem !important;
+          }
+          .tendance-counter {
+            font-size: 2rem !important;
+          }
+          #collections section,
+          section[data-section-id="tendances"],
+          section[data-section-id="featured"],
+          section[data-section-id="3d-viewer"] {
+            padding-left: 4vw !important;
+            padding-right: 4vw !important;
+          }
+          .collection-glow,
+          .featured-glow {
+            width: 300px !important;
+            height: 300px !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .tendance-card {
+            padding: 1rem !important;
+          }
+          .tendance-counter {
+            font-size: 1.5rem !important;
+          }
+        }
+
+        /* Respect reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+          .tendance-card,
+          .tendance-card-border-glow,
+          .morph-particle {
+            animation: none !important;
+            transition: none !important;
+          }
+        }
+      `}</style>
     </main>
     </>
   );

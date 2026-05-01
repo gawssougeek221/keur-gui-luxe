@@ -483,6 +483,18 @@ export default function CountdownCollection() {
                 el.style.opacity = "0.5";
                 el.style.transform = "scale(1)";
               }}
+              onTouchStart={(e) => {
+                const el = e.currentTarget;
+                el.style.filter = "blur(0px)";
+                el.style.opacity = "0.8";
+                el.style.transform = "scale(1.05)";
+              }}
+              onTouchEnd={(e) => {
+                const el = e.currentTarget;
+                el.style.filter = "blur(3px)";
+                el.style.opacity = "0.5";
+                el.style.transform = "scale(1)";
+              }}
             >
               <img
                 src={img}

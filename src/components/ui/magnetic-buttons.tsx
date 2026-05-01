@@ -66,6 +66,22 @@ function MagneticButton({
       });
     };
 
+    const onTouchMove = (e: TouchEvent) => {
+      if (!e.touches[0]) return;
+      const rect = btn.getBoundingClientRect();
+      const x = e.touches[0].clientX - rect.left - rect.width / 2;
+      const y = e.touches[0].clientY - rect.top - rect.height / 2;
+
+      gsap.to(btn, {
+        x: x * 0.15,
+        y: y * 0.15,
+        rotateX: -y * 0.08,
+        rotateY: x * 0.08,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    };
+
     const onLeave = () => {
       gsap.to(btn, {
         x: 0,
@@ -79,9 +95,13 @@ function MagneticButton({
 
     btn.addEventListener("mousemove", onMove);
     btn.addEventListener("mouseleave", onLeave);
+    btn.addEventListener("touchmove", onTouchMove, { passive: true });
+    btn.addEventListener("touchend", onLeave);
     return () => {
       btn.removeEventListener("mousemove", onMove);
       btn.removeEventListener("mouseleave", onLeave);
+      btn.removeEventListener("touchmove", onTouchMove);
+      btn.removeEventListener("touchend", onLeave);
     };
   }, []);
 

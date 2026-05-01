@@ -161,7 +161,7 @@ export default function AiStyliste() {
             position: "fixed",
             bottom: "84px",
             right: "24px",
-            width: "380px",
+            width: "min(380px, calc(100vw - 48px))",
             maxHeight: "500px",
             zIndex: 999,
             display: "flex",

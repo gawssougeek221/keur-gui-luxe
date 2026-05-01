@@ -32,13 +32,18 @@ export default function ProductViewer3D() {
     camera.position.set(0, 1.2, 5);
     camera.lookAt(0, 0.5, 0);
 
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    ) || window.innerWidth < 768;
+
     const renderer = new THREE.WebGLRenderer({
       canvas: canvasRef.current,
       alpha: true,
-      antialias: true,
+      antialias: !isMobile,
+      powerPreference: isMobile ? "low-power" : "high-performance",
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
 
@@ -101,24 +106,33 @@ export default function ProductViewer3D() {
       new THREE.BufferAttribute(colors, 3)
     );
 
-    const dressMaterial = new THREE.MeshPhysicalMaterial({
-      vertexColors: true,
-      metalness: 0.6,
-      roughness: 0.25,
-      clearcoat: 0.4,
-      clearcoatRoughness: 0.2,
-      transparent: true,
-      opacity: 0.92,
-      side: THREE.DoubleSide,
-      envMapIntensity: 0.8,
-    });
+    const dressMaterial = isMobile
+      ? new THREE.MeshStandardMaterial({
+          vertexColors: true,
+          metalness: 0.5,
+          roughness: 0.3,
+          transparent: true,
+          opacity: 0.92,
+          side: THREE.DoubleSide,
+        })
+      : new THREE.MeshPhysicalMaterial({
+          vertexColors: true,
+          metalness: 0.6,
+          roughness: 0.25,
+          clearcoat: 0.4,
+          clearcoatRoughness: 0.2,
+          transparent: true,
+          opacity: 0.92,
+          side: THREE.DoubleSide,
+          envMapIntensity: 0.8,
+        });
 
     const dressMesh = new THREE.Mesh(dressGeometry, dressMaterial);
     dressMesh.position.y = -1.4;
     scene.add(dressMesh);
 
     /* ---- Sparkle Particles ---- */
-    const particleCount = 200;
+    const particleCount = isMobile ? 80 : 200;
     const particleGeometry = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
     const particleSizes = new Float32Array(particleCount);

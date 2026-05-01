@@ -371,6 +371,12 @@ export default function InstagramFeed() {
         .instagram-card:hover .instagram-hover-overlay {
           opacity: 1;
         }
+        .instagram-card:active .instagram-hover-overlay {
+          opacity: 1;
+        }
+        .instagram-card:focus-within .instagram-hover-overlay {
+          opacity: 1;
+        }
 
         @media (max-width: 768px) {
           .instagram-grid {

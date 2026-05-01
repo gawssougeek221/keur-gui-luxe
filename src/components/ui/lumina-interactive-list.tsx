@@ -12,6 +12,33 @@ export function Component() {
     if (isInitialized.current) return;
     isInitialized.current = true;
 
+    // --- WebGL capability check ---
+    const isWebGLAvailable = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        return !!(canvas.getContext("webgl2") || canvas.getContext("webgl"));
+      } catch {
+        return false;
+      }
+    };
+
+    // --- Mobile detection for performance tuning ---
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    ) || window.innerWidth < 768;
+
+    if (!isWebGLAvailable()) {
+      // Fallback: show first slide as static background
+      const wrapper = containerRef.current?.querySelector(".slider-wrapper");
+      if (wrapper) {
+        wrapper.classList.add("loaded");
+        wrapper.style.backgroundImage = `url(/images/slide-senegal-1.png)`;
+        wrapper.style.backgroundSize = "cover";
+        wrapper.style.backgroundPosition = "center";
+      }
+      return;
+    }
+
     // --- MAIN LOGIC ---
     const SLIDER_CONFIG: Record<string, any> = {
       settings: {
@@ -497,9 +524,9 @@ export function Component() {
 
       scene = new THREE.Scene();
       camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-      renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false });
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: isMobile ? "low-power" : "high-performance" });
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
 
       shaderMaterial = new THREE.ShaderMaterial({
         uniforms: {
