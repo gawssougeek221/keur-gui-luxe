@@ -49,6 +49,12 @@ export default function MorphingPreloader({ onComplete }: { onComplete: () => vo
     const container = containerRef.current;
     if (!path || !progress || !text || !line || !tagline || !container) return;
 
+    // Safety fallback: force completion after 12 seconds max
+    const safetyTimeout = setTimeout(() => {
+      setIsVisible(false);
+      onCompleteRef.current();
+    }, 12000);
+
     const totalMorphTime = (MORPH_PATHS.length - 1) * 0.8;
 
     // Build the timeline
@@ -191,6 +197,7 @@ export default function MorphingPreloader({ onComplete }: { onComplete: () => vo
 
     return () => {
       tl.kill();
+      clearTimeout(safetyTimeout);
     };
   }, []);
 
