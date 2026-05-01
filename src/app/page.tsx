@@ -17,6 +17,7 @@ import ProductViewer3D from "@/components/ui/product-viewer-3d";
 import ThemeToggle from "@/components/ui/theme-toggle";
 import MagneticButton from "@/components/ui/magnetic-buttons";
 import ExpandableGallery from "@/components/ui/expandable-gallery";
+import { RotatingText } from "@/components/ui/rotating-text";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -333,7 +334,13 @@ export default function HomePage() {
           <h2 className="section-title" style={{ marginBottom: "3rem", paddingLeft: "8vw" }}>
             L'Art de la{" "}
             <span style={{ color: "#ff007f" }}>Couture</span>{" "}
-            Africaine
+            <RotatingText
+              words={["Africaine", "Contemporaine", "Royale", "Originelle"]}
+              mode="flip"
+              interval={3000}
+              className="section-title"
+              style={{ color: "#d4af37" }}
+            />
           </h2>
 
           <ExpandableGallery />
@@ -354,7 +361,12 @@ export default function HomePage() {
           <div className="section-label">Tendances 2025</div>
           <h2 className="section-title" style={{ marginBottom: "3rem" }}>
             Les Tendances qui{" "}
-            <span style={{ color: "#ff007f" }}>Révolutionnent</span>{" "}
+            <RotatingText
+              words={["Révolutionnent", "Transforment", "Réinventent", "Redéfinissent"]}
+              mode="slide"
+              interval={2800}
+              style={{ color: "#ff007f" }}
+            />{" "}
             la Mode
           </h2>
 
@@ -454,7 +466,14 @@ export default function HomePage() {
                 marginBottom: "2rem",
               }}
             >
-              Une création magistrale qui capture l'essence des couchers de soleil dakarois.
+              Une création{" "}
+              <RotatingText
+                words={["magistrale", "unique", "envoûtante", "impériale"]}
+                mode="blur"
+                interval={2500}
+                style={{ color: "#d4af37", fontWeight: 600 }}
+              />
+              {" "}qui capture l'essence des couchers de soleil dakarois.
               Confectionnée à la main dans nos ateliers de Dakar, cette pièce d'exception
               marie la soie éthiopienne à la broderie au fil d'or, créant une symphonie
               de lumière et de mouvement.
