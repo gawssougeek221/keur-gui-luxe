@@ -33,6 +33,7 @@ export default function MorphingPreloader({ onComplete }: { onComplete: () => vo
   const textRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const taglineRef = useRef<HTMLParagraphElement>(null);
+  const creditRef = useRef<HTMLParagraphElement>(null);
   const [isVisible, setIsVisible] = useState(true);
   const onCompleteRef = useRef(onComplete);
   const completedRef = useRef(false);
@@ -58,8 +59,9 @@ export default function MorphingPreloader({ onComplete }: { onComplete: () => vo
     const text = textRef.current;
     const line = lineRef.current;
     const tagline = taglineRef.current;
+    const credit = creditRef.current;
     const container = containerRef.current;
-    if (!path || !progress || !text || !line || !tagline || !container) {
+    if (!path || !progress || !text || !line || !tagline || !credit || !container) {
       // If any ref is missing, skip preloader immediately
       safeComplete.current();
       return;
@@ -98,6 +100,12 @@ export default function MorphingPreloader({ onComplete }: { onComplete: () => vo
             y: -30,
             opacity: 0,
             duration: 0.4,
+            ease: "power3.in",
+          }, 0.1)
+          .to(credit, {
+            y: -20,
+            opacity: 0,
+            duration: 0.3,
             ease: "power3.in",
           }, 0.1)
           .to(line, {
@@ -207,6 +215,13 @@ export default function MorphingPreloader({ onComplete }: { onComplete: () => vo
       { y: 20, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" },
       totalMorphTime - 0.3
+    );
+
+    // Phase 9.5: Credit line fades in
+    tl.fromTo(credit,
+      { y: 15, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
+      totalMorphTime - 0.1
     );
 
     // Phase 10: Hold for impact
@@ -323,6 +338,21 @@ export default function MorphingPreloader({ onComplete }: { onComplete: () => vo
         }}
       >
         Haute Couture Sénégalaise
+      </p>
+
+      {/* Credit */}
+      <p
+        ref={creditRef}
+        style={{
+          fontSize: "0.55rem",
+          letterSpacing: "0.25em",
+          textTransform: "uppercase",
+          color: "rgba(212,175,55,0.4)",
+          opacity: 0,
+          marginTop: "0.75rem",
+        }}
+      >
+        par Keur&apos;Geek Digital
       </p>
 
       {/* Progress bar */}
