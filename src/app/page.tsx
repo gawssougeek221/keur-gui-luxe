@@ -14,7 +14,6 @@ import InstagramFeed from "@/components/ui/instagram-feed";
 import AmbientSound from "@/components/ui/ambient-sound";
 import AiStyliste from "@/components/ui/ai-styliste";
 import ProductViewer3D from "@/components/ui/product-viewer-3d";
-import GoldParticles from "@/components/ui/gold-particles";
 import ThemeToggle from "@/components/ui/theme-toggle";
 import MagneticButton from "@/components/ui/magnetic-buttons";
 
@@ -552,7 +551,6 @@ export default function HomePage() {
       <MotionFooter />
 
       {/* ========== FLOATING UI — Ambient Sound + AI Styliste + Theme Toggle ========== */}
-      <GoldParticles />
       <AmbientSound />
       <AiStyliste />
       <ThemeToggle />
