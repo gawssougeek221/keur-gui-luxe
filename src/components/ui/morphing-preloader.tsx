@@ -4,9 +4,9 @@ import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
 /* 
-  Morphing Preloader — All SVG paths use exactly 12 cubic bezier segments
-  with matching command structure so GSAP can interpolate smoothly.
-  Shapes: Circle → Diamond → Star-flower → Hexagon → Cross → Flower → Circle
+  Morphing Preloader — SVG shape morphing with GSAP
+  All paths use exactly 12 cubic bezier segments for smooth interpolation.
+  Shapes: Circle → Diamond → Star-flower → Hexagon → Cross → Shield → Circle
 */
 
 const MORPH_PATHS = [
@@ -35,10 +35,22 @@ export default function MorphingPreloader({ onComplete }: { onComplete: () => vo
   const taglineRef = useRef<HTMLParagraphElement>(null);
   const [isVisible, setIsVisible] = useState(true);
   const onCompleteRef = useRef(onComplete);
+  const completedRef = useRef(false);
 
   useEffect(() => {
     onCompleteRef.current = onComplete;
   }, [onComplete]);
+
+  // Guard: call onComplete only once
+  const safeComplete = useRef(() => {});
+  useEffect(() => {
+    safeComplete.current = () => {
+      if (completedRef.current) return;
+      completedRef.current = true;
+      setIsVisible(false);
+      onCompleteRef.current();
+    };
+  }, []);
 
   useEffect(() => {
     const path = svgPathRef.current;
@@ -47,25 +59,30 @@ export default function MorphingPreloader({ onComplete }: { onComplete: () => vo
     const line = lineRef.current;
     const tagline = taglineRef.current;
     const container = containerRef.current;
-    if (!path || !progress || !text || !line || !tagline || !container) return;
+    if (!path || !progress || !text || !line || !tagline || !container) {
+      // If any ref is missing, skip preloader immediately
+      safeComplete.current();
+      return;
+    }
 
-    // Safety fallback: force completion after 12 seconds max
+    // Safety fallback: force completion after 6 seconds
     const safetyTimeout = setTimeout(() => {
-      setIsVisible(false);
-      onCompleteRef.current();
-    }, 12000);
+      console.log("[Preloader] Safety timeout reached — forcing completion");
+      safeComplete.current();
+    }, 6000);
 
     const totalMorphTime = (MORPH_PATHS.length - 1) * 0.8;
+
+    const finishPreloader = () => {
+      safeComplete.current();
+    };
 
     // Build the timeline
     const tl = gsap.timeline({
       onComplete: () => {
         // Exit animation — curtain wipe up
         const exitTl = gsap.timeline({
-          onComplete: () => {
-            setIsVisible(false);
-            onCompleteRef.current();
-          },
+          onComplete: finishPreloader,
         });
 
         exitTl
@@ -194,6 +211,14 @@ export default function MorphingPreloader({ onComplete }: { onComplete: () => vo
 
     // Phase 10: Hold for impact
     tl.to({}, { duration: 1 });
+
+    // Catch any errors in the timeline
+    try {
+      tl.eventCallback("onError", () => {
+        console.error("[Preloader] Timeline error — forcing completion");
+        safeComplete.current();
+      });
+    } catch {}
 
     return () => {
       tl.kill();

@@ -292,7 +292,7 @@ export default function HomePage() {
       {/* Morphing Preloader */}
       <MorphingPreloader onComplete={() => setPreloaderDone(true)} />
 
-      <main style={{ opacity: preloaderDone ? 1 : 0, transition: "opacity 0.5s ease" }}>
+      <main style={{ opacity: preloaderDone ? 1 : 0, transition: "opacity 1s ease", visibility: preloaderDone ? "visible" : "hidden" }}>
       {/* ========== HERO SLIDER ========== */}
       <LuminaInteractiveList />
 
